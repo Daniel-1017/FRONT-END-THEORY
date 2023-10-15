@@ -22,8 +22,8 @@
         - object **any JavaScript object**
         - array **any JavaScript array, type can be flexible or strict ( regarding the element types )**
         - tuple **added by TypeScript: fixed-length and fixed-type array**
-
-    use tuples when you need an exact amount of values in an array and you know the type of each value - enum **added by TypeScript: automatically enumerated global constant identifiers** - any **any kind of value, no specific type assignment**
+        - enum **added by TypeScript: automatically enumerated global constant identifiers**
+        - any **any kind of value, no specific type assignment**
 
 2.  #### Union Types
 
