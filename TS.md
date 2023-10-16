@@ -2,9 +2,9 @@
 
 ## Getting Started
 
-- TypeScript is a JavaScript superset. ( a programming language built up on JavaScript )
+TypeScript is a JavaScript superset. ( a programming language built up on JavaScript )
 
-2. #### What are TypeScript advantages?
+1. #### What are TypeScript advantages?
    - Types
    - Next-Gen JavaScript features
    - Nan-JavaScript features _interfaces_ and _generics_
@@ -79,4 +79,194 @@ if (typeof userInput === "string") {
 const generateError = (message: string, code: number): never => {
   throw { message, errorCode: code };
 };
+```
+
+## Classes and Interfaces
+
+_Classes_
+Classes are blueprints for objects, they allow us to define how a object should look like.
+
+```ts
+class User {
+  constructor(firstName: string, lastName: string) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  printUserInfo() {
+    console.log(this.firstName, this.lastName);
+  }
+}
+```
+
+Classes are compiled do constructor functions behind de scenes.
+
+_this keyword_
+The `this` typically refers back to the concrete instance of the class.
+
+```ts
+printUserInfo() {
+    console.log(this.firstName, this.lastName);
+}
+```
+
+_`private` and `public` access modifiers_
+
+```ts
+class User {
+  private password: string = "ed2612e4-5c96-4c15-af47-db0bf6ee12c3";
+  // public is the default, available outside
+
+  constructor(firstName: string, lastName: string) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+}
+```
+
+_Shorthand initialization_
+
+```ts
+class User {
+  private readonly id: string = "d6140cfd-7a9c-4c46-a097-90d8ae344cd7";
+
+  constructor(public firstName: string, public lastName: string) {}
+}
+```
+
+_`readonly` properties_
+
+```ts
+class User {
+  private readonly id: string = "d6140cfd-7a9c-4c46-a097-90d8ae344cd7";
+
+  constructor(public firstName: string, public lastName: string) {}
+}
+```
+
+With `readonly` should be pretty clear that a property should be initialized once and shouldn’t change thereafter.
+
+_Inheritance_
+Allows to inherit methods and properties from the parent class ( super class / base class )
+
+```ts
+class Department {
+  protected employees: string[] = [];
+
+  constructor(private readonly id: string, public name: string) {}
+}
+
+class ITDepartment extends Department {
+  constructor(id: string, public admins: string[]) {
+    super(id, "IT"); // Calls the constructor of the parent class
+  }
+}
+
+class Accounting extends Department {
+  constructor(id: string, private reports: string[]) {
+    super(id, "Accounting"); // Calls the constructor of the parent class
+  }
+
+  addReport(text: string) {
+    this.reports.push(text);
+  }
+}
+```
+
+_`protected` modifier_
+Doesn’t allow to access property from outside but allows to access properties in child classes.
+
+```ts
+class Department {
+  protected employees: string[] = [];
+
+  constructor(private readonly id: string, public name: string) {}
+}
+```
+
+_`getters` and `setters`_
+Can be great for encapsulating logic and for adding extra logic when you try to read a property or when you try to set a property.
+
+```ts
+class Accounting extends Department {
+  private lastReport: string;
+
+  // GETTER
+  get mostRecentReport() {
+    if (this.lastReport) return this.lastReport;
+    throw new Error("No report found!");
+  }
+
+  // SETTER
+  set mostRecentReport(value: string) {
+    if (!value) throw new Error("Please pass in a valid value!");
+    this.addReport(value);
+  }
+
+  constructor(id: string, private reports: string[]) {
+    super(id, "Accounting");
+    this.lastReport = reports[0];
+  }
+
+  addReport(text: string) {
+    this.reports.push(text);
+    this.lastReport = text;
+  }
+}
+```
+
+_`static` methods/properties_
+Static methods a available directly on the class not on the instance. Used for utility functions that you want to group to a class or global constants that you want to store in a class.
+For example: `Math`
+
+```ts
+class Department {
+  // STATIC PROPERTY
+  static fiscalYear = 2020;
+
+  protected employees: string[] = [];
+
+  constructor(private readonly id: string, public name: string) {}
+
+  // STATIC METHOD
+  static createEmployee(name: string) {
+    return { name: name };
+  }
+}
+```
+
+_`abstract` classes_
+When you want to force developers working with a certain class to implement/overwrite a certain method or whenever you want to ensure that a certain method is available in all classes based on some base class but when you also know that the exact implementation will depend on the specific version.
+
+```ts
+abstract class Department {
+  protected employees: string[] = [];
+
+  constructor(private readonly id: string, public name: string) {}
+
+  abstract describe(): void;
+}
+```
+
+Can’t be instantiated, its just a class that is there to be inherited from. The inheriting classes are forced to provide concrete implementation for the methods.
+
+_Singletons and `private` constructors_
+The `singletons` pattern is about ensuring that you always only have exactly one instance of a certain class. Useful when you can’t use `static` methods/properties or when you want to make sure that you can’t create multiple objects based on a class but you always have one object based on a class.
+
+```ts
+class AccountingDepartment extends Department {
+  private static instance: AccountingDepartment;
+
+  private constructor(id: string, private reports: string[]) {
+    super(id, "Accounting");
+  }
+
+  static getInstance() {
+    if (this.instance) {
+      return this.instance;
+    }
+    this.instance = new AccountingDepartment("id", []);
+    return this.instance;
+  }
+}
 ```
