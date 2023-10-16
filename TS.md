@@ -83,6 +83,8 @@ const generateError = (message: string, code: number): never => {
 
 ## Classes and Interfaces
 
+### Classes
+
 _Classes_<br>
 Classes are blueprints for objects, they allow us to define how a object should look like.
 
@@ -269,4 +271,66 @@ class AccountingDepartment extends Department {
     return this.instance;
   }
 }
+```
+
+### Interfaces
+
+1. _Interface_
+- An interface describes the structure of an object. Interfaces are often used to share functionality amongst different classes not regarding their concrete implementation but regarding the structure a class should have. Interfaces are not compiled to JavaScript. Available only during development in TypeScript.
+```ts
+interface User {
+  firstName: string
+  middleName?: string
+  lastName: string
+  age: number
+
+  greet(phrase: string): void
+}
+```
+
+2. _Using `interfaces` with `classes`_
+```ts
+interface Greetable {
+	name: string
+	greet(phrase: string): void
+}
+
+class Person implements Greetable {
+	constructor(public name: string) {}
+
+	greet(phrase: string) {
+		console.log(`${phrase}, ${this.name}`)
+	}
+}
+```
+
+3. _Extending `interfaces_`_
+```ts
+interface Named {
+	readonly name: string
+}
+
+interface Greetable extends Named {
+	greet(phrase: string): void
+}
+
+class Person implements Greetable {
+	constructor(public name: string) {}
+
+	greet(phrase: string) {
+		console.log(`${phrase}, ${this.name}`)
+	}
+}
+```
+
+4. _`interfaces` as function types_
+```ts
+type AddFn (a: number, b:number) => number
+
+interface AddFn {
+	(a: number, b: number): number
+}
+
+let add: AddFn
+add = (n1: number, n2: number) => n1 + n2
 ```
