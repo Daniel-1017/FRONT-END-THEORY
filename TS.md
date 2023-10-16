@@ -85,8 +85,9 @@ const generateError = (message: string, code: number): never => {
 
 ### Classes
 
-_Classes_<br>
-Classes are blueprints for objects, they allow us to define how a object should look like.
+1. Classes
+- Classes are blueprints for objects, they allow us to define how a object should look like.
+- Classes are compiled do constructor functions behind de scenes.
 
 ```ts
 class User {
@@ -101,10 +102,8 @@ class User {
 }
 ```
 
-Classes are compiled do constructor functions behind de scenes.
-
-_this keyword_<br>
-The `this` typically refers back to the concrete instance of the class.
+2. this keyword
+- The `this` typically refers back to the concrete instance of the class.
 
 ```ts
 printUserInfo() {
@@ -112,8 +111,7 @@ printUserInfo() {
 }
 ```
 
-_`private` and `public` access modifiers_<br>
-
+3. `private` and `public` access modifiers
 ```ts
 class User {
   private password: string = "ed2612e4-5c96-4c15-af47-db0bf6ee12c3";
@@ -126,7 +124,17 @@ class User {
 }
 ```
 
-_Shorthand initialization_<br>
+4. Shorthand initialization
+```ts
+class User {
+  private readonly id: string = "d6140cfd-7a9c-4c46-a097-90d8ae344cd7";
+
+  constructor(public firstName: string, public lastName: string) {}
+}
+```
+
+5. `readonly` properties
+- With `readonly` should be pretty clear that a property should be initialized once and shouldn’t change thereafter.
 
 ```ts
 class User {
@@ -136,20 +144,8 @@ class User {
 }
 ```
 
-_`readonly` properties_<br>
-
-```ts
-class User {
-  private readonly id: string = "d6140cfd-7a9c-4c46-a097-90d8ae344cd7";
-
-  constructor(public firstName: string, public lastName: string) {}
-}
-```
-
-With `readonly` should be pretty clear that a property should be initialized once and shouldn’t change thereafter.
-
-_Inheritance_<br>
-Allows to inherit methods and properties from the parent class ( super class / base class )
+6. Inheritance
+- Allows to inherit methods and properties from the parent class ( super class / base class )
 
 ```ts
 class Department {
@@ -175,8 +171,8 @@ class Accounting extends Department {
 }
 ```
 
-_`protected` modifier_<br>
-Doesn’t allow to access property from outside but allows to access properties in child classes.
+7. `protected` modifier
+- Doesn’t allow to access property from outside but allows to access properties in child classes.
 
 ```ts
 class Department {
@@ -186,8 +182,8 @@ class Department {
 }
 ```
 
-_`getters` and `setters`_<br>
-Can be great for encapsulating logic and for adding extra logic when you try to read a property or when you try to set a property.
+8. `getters` and `setters`
+- Can be great for encapsulating logic and for adding extra logic when you try to read a property or when you try to set a property.
 
 ```ts
 class Accounting extends Department {
@@ -217,9 +213,9 @@ class Accounting extends Department {
 }
 ```
 
-_`static` methods/properties_<br>
-Static methods a available directly on the class not on the instance. Used for utility functions that you want to group to a class or global constants that you want to store in a class.
-For example: `Math`
+9. `static` methods/properties
+- Static methods a available directly on the class not on the instance. Used for utility functions that you want to group to a class or global constants that you want to store in a class.
+- For example: `Math`
 
 ```ts
 class Department {
@@ -237,8 +233,9 @@ class Department {
 }
 ```
 
-_`abstract` classes_<br>
-When you want to force developers working with a certain class to implement/overwrite a certain method or whenever you want to ensure that a certain method is available in all classes based on some base class but when you also know that the exact implementation will depend on the specific version.
+10. `abstract` classes
+- When you want to force developers working with a certain class to implement/overwrite a certain method or whenever you want to ensure that a certain method is available in all classes based on some base class but when you also know that the exact implementation will depend on the specific version.
+- Can’t be instantiated, its just a class that is there to be inherited from. The inheriting classes are forced to provide concrete implementation for the methods.
 
 ```ts
 abstract class Department {
@@ -250,10 +247,8 @@ abstract class Department {
 }
 ```
 
-Can’t be instantiated, its just a class that is there to be inherited from. The inheriting classes are forced to provide concrete implementation for the methods.
-
-_Singletons and `private` constructors_<br>
-The `singletons` pattern is about ensuring that you always only have exactly one instance of a certain class. Useful when you can’t use `static` methods/properties or when you want to make sure that you can’t create multiple objects based on a class but you always have one object based on a class.
+11. Singletons and `private` constructors
+- The `singletons` pattern is about ensuring that you always only have exactly one instance of a certain class. Useful when you can’t use `static` methods/properties or when you want to make sure that you can’t create multiple objects based on a class but you always have one object based on a class.
 
 ```ts
 class AccountingDepartment extends Department {
