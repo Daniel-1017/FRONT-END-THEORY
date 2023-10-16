@@ -304,7 +304,7 @@ class Person implements Greetable {
 }
 ```
 
-3. _Extending `interfaces_`_
+3. _Extending `interfaces`_
 ```ts
 interface Named {
 	readonly name: string
@@ -333,4 +333,127 @@ interface AddFn {
 
 let add: AddFn
 add = (n1: number, n2: number) => n1 + n2
+```
+
+## Advanced Types
+
+1. Intersection types
+- When you want ta combination of two types / interfaces.
+```ts
+type Admin = {
+  name: string
+  privileges: string[]
+}
+
+type Employee = {
+  name: string
+  startDate: Date
+}
+
+type ElevatedEmployee = Admin & Employee
+```
+
+2. Type Guards
+```ts
+type UnknownEmployee = Employee | Admin
+
+function printEmployeeInformation(emp: UnknownEmployee) {
+  console.log(`Name: ${emp.name}`);
+  // TYPE GUARD
+  if ("privileges" in emp) {
+    console.log(`Privileges: ${emp.privileges}`);
+  }
+}
+
+// OR
+
+// When working with classes
+class Car {
+  drive() {
+    console.log("Driving...");
+  }
+}
+
+class Truck {
+  drive() {
+    console.log("Driving a truck...");
+  }
+
+  loadCargo(amount: number) {
+    console.log("Loading cargo... " + amount);
+  }
+}
+
+type Vehicle = Car | Truck
+
+function useVehicle(vehicle: Vehicle) {
+  vehicle.drive()
+  // TYPE GUARD
+  if (vehicle instanceof Truck) {
+    vehicle.loadCargo(10)
+  }
+}
+```
+
+3. Descriminated union
+- This is a discriminated union because we have a common property in every object that makes up our union which describes that object.
+```ts
+interface Bird {
+  type: "bird"
+  flyingSpeed: number
+}
+
+interface Horse {
+  type: "horse"
+  runningSpeed: number
+}
+
+type Animal = Bird | Horse
+
+function moveAnimal(animal: Animal) {
+  let speed
+  switch (animal.type) {
+    case "bird":
+      speed = animal.flyingSpeed
+      break
+    case "horse":
+      speed = animal.runningSpeed
+      break
+  }
+
+  console.log(`Moving at speed ${speed}`);
+}
+```
+
+4. Type Casting
+```ts
+const paragraph = <HTMLParagraphElement>document.getElementById("paragraph")!
+// OR
+const paragraph2 = document.getElementById("paragraph")! as HTMLParagraphElement
+```
+
+5. Index Properties
+- Useful when we don’t know the name of the properties and how many properties we will have.
+```ts
+interface ErrorContainer {
+  [prop: string]: string
+}
+
+const errorBag: ErrorContainer = {
+  email: "Not a valid email!",
+  message: "Must start with a capital character!"
+}
+```
+
+6. Function Overloads
+- You can have multiple functions with the same name but different parameter types and return type. However the number of parameters should be the same.
+```ts
+function add(a: number, b: number): number // Overload 1
+function add(a: string, b: string): string // Overload 2
+function add(a: Combinable, b: Combinable) {
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString()
+  }
+  return a + b
+}
 ```
