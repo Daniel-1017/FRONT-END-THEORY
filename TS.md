@@ -452,3 +452,105 @@ function add(a: Combinable, b: Combinable) {
   return a + b
 }
 ```
+
+## Generics
+
+1. Generic
+- Generics enable you to write code that can work with different data types while preserving type information. They give us flexibility combined with type safety. We are flexible regarding the values we are passing in and we got full type support for what we then want to do with the class or with the result of a generic function.
+
+2. Generic function
+- In this example, `identity` is a generic function that takes a type parameter `T`. The type parameter `T` is a placeholder for the actual type that will be provided when the function is called. You can specify the type argument explicitly, as shown in the usage example, or let TypeScript infer it from the provided argument.
+```ts
+function identity<T>(arg: T): T {
+    return arg;
+}
+
+// Example
+const result = identity<string>("Hello, TypeScript");
+```
+
+3. Constraints
+- Constrains enable you to restrict the types of your `generic` types. Use `extends` keyword. Constrains allows us to narrow down the concrete types that may be used in a generic function.
+```ts
+function merge<T extends object, U extends object>(objA: T, objB: U) {
+  return Object.assign(objA, objB)
+}
+```
+
+4. `keyof` constraint
+- We are saying the `T` should be an object and `U` should be any `key` in that object.
+```ts
+function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
+  return `Value: ${obj[key]}`
+}
+```
+
+5. Generic classes
+```ts
+class DataStorage<T> {
+  private data: T[] = []
+
+  addItem(item: T) {
+    this.data.push(item)
+  }
+
+  removeItem(item: T) {
+    this.data.splice(this.data.indexOf(item), 1)
+  }
+
+  getItems() {
+    return [...this.data]
+  }
+}
+
+// Example with strings
+const textStorage = new DataStorage<string>()
+textStorage.addItem("Max")
+textStorage.addItem("Jack")
+textStorage.removeItem("Manu")
+
+// Example with numbers
+const numberStorage = new DataStorage<number>()
+numberStorage.addItem(10)
+numberStorage.addItem(20)
+numberStorage.removeItem(20)
+```
+
+6. Utility types
+```ts
+// Partial
+interface Person {
+    name: string;
+    age: number;
+    email: string;
+}
+
+// Create a type representing a partial Person
+type PartialPerson = Partial<Person>;
+
+// Usage
+const partialPerson: PartialPerson = {
+    name: "Alice"
+    // Other properties are optional
+};
+
+// Readonly
+const names: Readonly<string[]> = ["Max", "Jack"]
+// names.push("Anna") is allowd but TypeScript will show an error
+// because of Readonly
+```
+
+7. Generic Types vs Union Types
+- With generic types we are saying that you got to choose once and then you are only allowed to add that exact type of data. Generic types are great if you want to lock in a certain type. Use the same type throughout the entire `class`/`function`.
+- With union types we are saying that the storage can have different types mixed. Are great when you want to have a function which you can call with on of the types available every time you call it.
+```ts
+// Generic Types
+class DataStorage<T extends string | number | boolean> {
+  private data: T[] = []
+}
+
+// Union Types
+class DataStorage {
+  private data: (string | number | boolean)[] = []
+}
+```
